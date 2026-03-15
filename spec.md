@@ -1,11 +1,7 @@
 # API Specification
 
-## New Section
-This is new content at the top.
+## Rate Limiting (Public API)
+Rate limit: 50 requests per minute
 
-## Rate Limiting
-Rate limit: 100 requests per minute
-
-## Endpoints
-POST /api/data
-GET /api/status
+## Rate Limiting (Internal API)
+Rate limit: 50 requests per minute
