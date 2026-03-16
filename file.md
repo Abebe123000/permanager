@@ -1,5 +1,5 @@
-Line 1
-Line 2
-Inserted A
-Inserted B
-Line 3
+Header
+Section A start
+Section A content
+Section A end
+Footer
