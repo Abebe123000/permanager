@@ -1,6 +1,4 @@
-Header
-Prefix line
-Section A start
-Section A content
-Section A end
+# Title
+## Rate
+Target line
 Footer
