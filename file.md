@@ -1,5 +1,3 @@
-# Title v2
-## Rate
-Target line
-Appendix
-Footer
+Line 1
+Line 2
+Line 3
