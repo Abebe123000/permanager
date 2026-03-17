@@ -190,6 +190,64 @@ Git の標準認証機構を利用します。追加の設定は不要です。
 
 ---
 
+## メタデータ（ロックファイル）
+
+### 目的
+
+コードと仕様書が合致しているかどうかの状態を管理する。人間や AI が一度確認・修正した箇所を `matched` として記録し、仕様が更新されるまでは再レビュー不要という共通認識を作る。
+
+### ライフサイクル
+
+```
+リンクが新規追加される → unverified
+         ↓
+人間 / AI が実装を確認・修正 → matched
+         ↓
+仕様が更新され docref update でURLのコミットハッシュが変わる → matched が外れる → unverified
+```
+
+### ファイル形式
+
+`.docref/metadata.json` にロックファイルとして保存する（VCS に含める）。
+
+```json
+{
+  "entries": [
+    {
+      "id": "a1b2c3",
+      "file": "src/api.rs",
+      "url": "https://github.com/owner/repo/blob/abc123/docs/spec.md#L15-L30",
+      "line_hint": 12,
+      "status": "matched"
+    },
+    {
+      "id": "d4e5f6",
+      "file": "src/handler.rs",
+      "url": "https://github.com/owner/repo/blob/abc123/docs/spec.md#L15-L30",
+      "line_hint": 45,
+      "status": "unverified"
+    }
+  ]
+}
+```
+
+### エントリの識別
+
+コードには URL 以外を書かない運用を維持するため、識別子はロックファイル側で管理する。
+
+- **主キー**: `(file, url)` の組み合わせ
+- **`line_hint`**: 同一ファイルに同一 URL が複数存在する場合の曖昧さ解消にのみ使用する補助情報
+- **再マッチング**: `docref check` 実行時にソースをスキャンして `(file, url)` で既存エントリと照合し、`line_hint` を最新行番号に更新する
+
+### status の種類
+
+| status | 意味 |
+|--------|------|
+| `unverified` | 未確認（新規追加時のデフォルト） |
+| `matched` | 実装と仕様が合致していることを確認済み |
+
+---
+
 ## ディレクトリ構成（予定）
 
 ```
