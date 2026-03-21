@@ -1,0 +1,13 @@
+[package]
+name = "docref"
+version = "0.1.0"
+edition = "2021"
+
+[dev-dependencies]
+indoc = "2"
+tempfile = "3"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+ignore = "0.4"
+regex = "1"
