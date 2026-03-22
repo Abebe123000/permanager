@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test 5: 元の行番号から変更を検出（docrefの実際のユースケース）
+# Test 5: 元の行番号から変更を検出（permanagerの実際のユースケース）
 #
 # シナリオ：
 # - パーマネントリンク: blob/COMMIT1/spec.md#L3-L4
@@ -14,7 +14,7 @@
 set -e
 source "$(dirname "$0")/helpers.sh"
 
-echo_header "Test 5: 元の行番号から変更を検出（docrefの実際のユースケース）"
+echo_header "Test 5: 元の行番号から変更を検出（permanagerの実際のユースケース）"
 
 # セットアップ
 WORK_DIR=$(setup_git_repo)
@@ -141,7 +141,7 @@ fi
 
 # まとめ
 echo
-echo_subheader "docrefへの応用"
+echo_subheader "permanagerへの応用"
 cat << EOF
 
 ${RED}git log -L の限界:${NC}

@@ -11,7 +11,7 @@ static GITHUB_PERMALINK_RE: LazyLock<Regex> = LazyLock::new(|| {
 });
 
 #[derive(Parser)]
-#[command(name = "docref", about = "Manage permanent links to specifications in source code")]
+#[command(name = "permanager", about = "Manage permanent links to specifications in source code")]
 struct Cli {
     #[command(subcommand)]
     command: Commands,

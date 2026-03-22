@@ -145,7 +145,7 @@ fi
 
 # まとめ
 echo
-echo_subheader "docrefへの応用"
+echo_subheader "permanagerへの応用"
 cat << 'EOF'
 
 行番号の対応を追跡する方法:

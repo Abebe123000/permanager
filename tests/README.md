@@ -1,12 +1,12 @@
 # Tests
 
-docref プロジェクトのテストスイート
+permanager プロジェクトのテストスイート
 
 ## テストグループ
 
 ### [git-tracking/](git-tracking/)
 
-Gitの内容追跡機能の検証テスト。docrefの`check`コマンド実装のための基礎研究。
+Gitの内容追跡機能の検証テスト。permanagerの`check`コマンド実装のための基礎研究。
 
 - `git log -S` vs `git log -L` の比較
 - 行番号の移動と内容変更の区別

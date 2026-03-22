@@ -1,4 +1,4 @@
-# docref アーキテクチャ・実装仕様
+# permanager アーキテクチャ・実装仕様
 
 ## 実装言語
 
@@ -71,7 +71,7 @@ struct SpecLink {
 
 **キャッシュ構造:**
 ```
-~/.cache/docref/repos/
+~/.cache/permanager/repos/
 ├── github.com/
 │   ├── owner1/repo1/
 │   └── owner2/repo2/
@@ -203,12 +203,12 @@ Git の標準認証機構を利用します。追加の設定は不要です。
          ↓
 人間 / AI が実装を確認・修正 → matched
          ↓
-仕様が更新され docref update でURLのコミットハッシュが変わる → matched が外れる → unverified
+仕様が更新され permanager update でURLのコミットハッシュが変わる → matched が外れる → unverified
 ```
 
 ### ファイル形式
 
-`.docref/metadata.json` にロックファイルとして保存する（VCS に含める）。
+`.permanager/metadata.json` にロックファイルとして保存する（VCS に含める）。
 
 ```json
 {
@@ -237,7 +237,7 @@ Git の標準認証機構を利用します。追加の設定は不要です。
 
 - **主キー**: `(file, url)` の組み合わせ
 - **`line_hint`**: 同一ファイルに同一 URL が複数存在する場合の曖昧さ解消にのみ使用する補助情報
-- **再マッチング**: `docref check` 実行時にソースをスキャンして `(file, url)` で既存エントリと照合し、`line_hint` を最新行番号に更新する
+- **再マッチング**: `permanager check` 実行時にソースをスキャンして `(file, url)` で既存エントリと照合し、`line_hint` を最新行番号に更新する
 
 ### status の種類
 

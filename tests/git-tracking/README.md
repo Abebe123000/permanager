@@ -1,6 +1,6 @@
 # Git Content Tracking Tests
 
-docref の `check` コマンド実装のための検証テスト集
+permanager の `check` コマンド実装のための検証テスト集
 
 ## 概要
 
@@ -86,7 +86,7 @@ git log --oneline
 - 例：3-4行目が6-7行目に移動した後に内容が変更されても見逃される
 - `git log -L 3,4:file OLD..NEW` は移動先の変更を追跡しない
 
-## docref への応用
+## permanager への応用
 
 ### 実装フロー（Test 7 の実証に基づく）
 
