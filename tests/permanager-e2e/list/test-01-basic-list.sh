@@ -6,7 +6,7 @@
 # - 正しいファイルパス・行番号・URLが出力される
 
 set -e
-source "$(dirname "$0")/helpers.sh"
+source "$(dirname "$0")/../helpers.sh"
 
 echo_header "Test 1: 基本的な list コマンド"
 

@@ -31,20 +31,14 @@ echo_info() {
     echo -e "${CYAN}ℹ $1${NC}"
 }
 
-# permanagerバイナリを探す
+# permanagerバイナリを探す（ローカルビルドを優先）
 find_binary() {
-    # PATHにあるか確認
-    if command -v permanager &>/dev/null; then
-        echo "permanager"
-        return
-    fi
-
     local script_dir
     script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     local project_root
     project_root="$(cd "$script_dir/../.." && pwd)"
 
-    # releaseビルドを確認
+    # releaseビルドを優先
     if [ -f "$project_root/target/release/permanager" ]; then
         echo "$project_root/target/release/permanager"
         return
@@ -53,6 +47,12 @@ find_binary() {
     # debugビルドを確認
     if [ -f "$project_root/target/debug/permanager" ]; then
         echo "$project_root/target/debug/permanager"
+        return
+    fi
+
+    # PATHにあるか確認
+    if command -v permanager &>/dev/null; then
+        echo "permanager"
         return
     fi
 

@@ -13,8 +13,14 @@ echo
 PASS=0
 FAIL=0
 
-for test_file in "$SCRIPT_DIR"/test-*.sh; do
-    if [ -f "$test_file" ]; then
+run_tests_in_dir() {
+    local dir="$1"
+    local label="$2"
+
+    local found=0
+    for test_file in "$dir"/test-*.sh; do
+        [ -f "$test_file" ] || continue
+        found=1
         if bash "$test_file"; then
             PASS=$((PASS + 1))
         else
@@ -23,6 +29,22 @@ for test_file in "$SCRIPT_DIR"/test-*.sh; do
         echo
         echo "--------------------------------------"
         echo
+    done
+
+    if [ "$found" -eq 0 ]; then
+        echo "  (テストなし: $label)"
+        echo
+    fi
+}
+
+for subdir in "$SCRIPT_DIR"/list "$SCRIPT_DIR"/config; do
+    if [ -d "$subdir" ]; then
+        label=$(basename "$subdir")
+        echo "======================================"
+        echo "[$label]"
+        echo "======================================"
+        echo
+        run_tests_in_dir "$subdir" "$label"
     fi
 done
 
