@@ -1,8 +1,12 @@
+use std::io;
 use std::path::Path;
 use std::sync::LazyLock;
 
 use ignore::WalkBuilder;
 use regex::Regex;
+
+use crate::config::PermanagerConfig;
+use crate::outdated::{check_link_status, LinkStatus}; // LinkStatus::Current のみ参照
 
 pub static GITHUB_PERMALINK_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"https://github\.com/[^/\s]+/[^/\s]+/blob/[0-9a-f]{40}/[^\s]*")
@@ -57,17 +61,30 @@ pub fn collect_links(root: &Path) -> Vec<Link> {
     links
 }
 
-pub fn run_list(root: &Path, out: &mut impl std::io::Write) {
+pub fn run_list(root: &Path, out: &mut impl io::Write, outdated: bool, config: &PermanagerConfig) {
     let links = collect_links(root);
 
+    if !outdated {
+        for link in &links {
+            writeln!(out, "{}:{} {}", link.file, link.line, link.url).unwrap();
+        }
+        return;
+    }
+
+    // --outdated: 古いリンクのみをデフォルトと同じフォーマットで出力
     for link in &links {
-        writeln!(out, "{}:{} {}", link.file, link.line, link.url).unwrap();
+        match check_link_status(&link.url, config) {
+            Ok(LinkStatus::Current) => {}
+            Ok(_) => writeln!(out, "{}:{} {}", link.file, link.line, link.url).unwrap(),
+            Err(e) => eprintln!("warning: {}", e),
+        }
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::{run_list, GITHUB_PERMALINK_RE};
+    use crate::config::PermanagerConfig;
     use std::fs;
     use tempfile::tempdir;
 
@@ -166,7 +183,7 @@ mod tests {
 
         let root = crate::find_git_root(&sub).unwrap();
         let mut out = Vec::new();
-        run_list(&root, &mut out);
+        run_list(&root, &mut out, false, &PermanagerConfig::default());
 
         // git ルートから見た src/code.rs と表示される
         assert_eq!(
@@ -187,7 +204,7 @@ mod tests {
         fs::write(src_dir.join("main.rs"), format!("// {url}\n")).unwrap();
 
         let mut out = Vec::new();
-        run_list(dir.path(), &mut out);
+        run_list(dir.path(), &mut out, false, &PermanagerConfig::default());
 
         assert_eq!(
             String::from_utf8(out).unwrap(),
@@ -200,7 +217,7 @@ mod tests {
     fn list_no_links_found() {
         let dir = tempdir().unwrap();
         let mut out = Vec::new();
-        run_list(dir.path(), &mut out);
+        run_list(dir.path(), &mut out, false, &PermanagerConfig::default());
         assert_eq!(String::from_utf8(out).unwrap(), "");
     }
 
@@ -212,7 +229,7 @@ mod tests {
         fs::write(dir.path().join("code.rs"), format!("// {url}\n")).unwrap();
 
         let mut out = Vec::new();
-        run_list(dir.path(), &mut out);
+        run_list(dir.path(), &mut out, false, &PermanagerConfig::default());
 
         assert_eq!(
             String::from_utf8(out).unwrap(),
@@ -233,7 +250,7 @@ mod tests {
         .unwrap();
 
         let mut out = Vec::new();
-        run_list(dir.path(), &mut out);
+        run_list(dir.path(), &mut out, false, &PermanagerConfig::default());
 
         assert_eq!(
             String::from_utf8(out).unwrap(),

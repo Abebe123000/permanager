@@ -4,6 +4,7 @@ use clap::{Parser, Subcommand};
 
 mod config;
 mod list;
+mod outdated;
 
 use config::{
     run_config_list, run_config_set_linked_repo, run_config_unset_linked_repo, ConfigSetSection,
@@ -21,7 +22,11 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     /// Scan and list specification permanent links
-    List,
+    List {
+        /// Show only outdated links (requires network access to linked repositories)
+        #[arg(long)]
+        outdated: bool,
+    },
     /// Manage configuration in .permanager.toml
     Config {
         #[command(subcommand)]
@@ -48,8 +53,9 @@ fn main() {
     let root = find_git_root(&cwd).unwrap_or(cwd);
 
     match cli.command {
-        Commands::List => {
-            run_list(&root, &mut std::io::stdout());
+        Commands::List { outdated } => {
+            let config = config::read_config(&root);
+            run_list(&root, &mut std::io::stdout(), outdated, &config);
         }
         Commands::Config { subcommand } => match subcommand {
             ConfigSubcommand::Set { section } => match section {
