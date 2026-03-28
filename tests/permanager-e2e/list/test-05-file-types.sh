@@ -5,7 +5,7 @@
 # - .py / .ts / .md / .yaml など拡張子を問わず検出できる
 
 set -e
-source "$(dirname "$0")/helpers.sh"
+source "$(dirname "$0")/../helpers.sh"
 
 echo_header "Test 5: 様々なファイル形式でリンクを検出する"
 

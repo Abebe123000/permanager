@@ -6,7 +6,7 @@
 # - すべてのファイルのリンクが出力される
 
 set -e
-source "$(dirname "$0")/helpers.sh"
+source "$(dirname "$0")/../helpers.sh"
 
 echo_header "Test 2: 複数ファイルにリンクがある場合"
 

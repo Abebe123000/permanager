@@ -6,7 +6,7 @@
 # - そのファイルのリンクは出力されない
 
 set -e
-source "$(dirname "$0")/helpers.sh"
+source "$(dirname "$0")/../helpers.sh"
 
 echo_header "Test 3: .gitignore に含まれるファイルを無視する"
 
